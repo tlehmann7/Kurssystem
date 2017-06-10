@@ -1,0 +1,41 @@
+#register-labels, #login-labels, #createcourse-labels, #numgen-labels
+{
+	/*width: 35%;*/
+	display: inline-block;
+	text-align: left;
+}
+
+#register-inputfields, #login-inputfields, #createcourse-inputfields, #numgen-inputfields
+{
+	/*width: 35%;*/
+	display: inline-block;
+	margin-left: 0.5%;
+}
+
+.off
+{
+	display: none;
+}
+
+#authkey-info
+{
+	position: absolute;
+	margin-right: 0.5em;
+}
+
+#projectTable
+{
+	font-size: 24px;
+}
+
+.footer-link
+{
+	text-decoration: none;
+	color: inherit;
+}
+
+.downloadicon
+{
+	width: 100px;
+	height: 100px;
+}

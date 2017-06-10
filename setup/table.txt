@@ -1,0 +1,1 @@
+create table users (ID mediumint AUTO_INCREMENT, username varchar(100), password varchar(100), vname varchar(100), nname varchar(100), email varchar(100), alevel tinyint, type varchar(1), PRIMARY KEY (ID));

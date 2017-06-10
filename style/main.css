@@ -1,0 +1,57 @@
+/* Allgemein */
+
+@font-face
+{
+	font-family: 'UI';
+	src: url('../fonts/OpenSans-Regular.ttf');
+}
+
+body
+{
+	color: rgba(236, 240, 241, 1.0);
+	font-size: 24px;
+	font-family: Arial;
+	font-family: UI;
+	background-color: rgba(52, 73, 94, 1.0);
+	background-image: url("../wallpapers/schule.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100%;
+}
+
+.wrapper70
+{
+	position: absolute;
+	top: 10%;
+	width: 70%;
+	left: 15%;
+	text-align: left;
+}
+
+.Success
+{
+	color: rgb(46, 204, 113);
+}
+
+.Error
+{
+	color: rgb(231, 76, 60);
+}
+
+.Signal
+{
+	color: rgb(230, 126, 34);
+}
+
+h1
+{
+	color: rgb(231, 76, 60);
+	font-size: 40px;
+	font-family: inherit;
+	width: 20%;
+}
+
+h6
+{
+	font-size: 14px;
+}
