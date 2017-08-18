@@ -26,17 +26,17 @@
 			if(!$ref->connect_error)
 			{
 				$query_string = "SELECT DISTINCT alevel FROM ".$db_table_user." WHERE alevel IS NOT NULL ORDER BY alevel DESC;";
-				$alevels = $ref->query($query_string)->fetch_all(MYSQLI_NUM);
+				$alevels = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
 				
 				for($i = 0; $i < count($alevels); $i++)
 				{
-					$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i][0]." ORDER BY class ASC;";
-					$classes = $ref->query($query_string)->fetch_all(MYSQLI_NUM);
-					print_normal($alevels[$i][0].":");
+					$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i]['alevel']." ORDER BY class ASC;";
+					$classes = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+					print_normal($alevels[$i]['alevel'].":");
 					for($p = 0; $p < count($classes); $p++)
 					{
-						$id = $allowedCPrefix.$alevels[$i][0].$allowedClassesPostfix.$p;
-						echo "<label for = \"".$id."\">".$classes[$p][0]."</label><input type = \"checkbox\" name = \"".$id."\"/>".PHP_EOL;
+						$id = $allowedCPrefix.$alevels[$i]['alevel'].$allowedClassesPostfix.$classes[$p]['class'];
+						echo "<label for = \"".$id."\">".$classes[$p]['class']."</label><input type = \"checkbox\" name = \"".$id."\"/>".PHP_EOL;
 					}
 					echo "<br>".PHP_EOL;
 				}
@@ -87,7 +87,7 @@
 					$buildString = "";
 					for($p = 0; $p < count($classes); $p++)
 					{
-						$id = $allowedCPrefix.$alevels[$i]['alevel'].$allowedClassesPostfix.$p;
+						$id = $allowedCPrefix.$alevels[$i]['alevel'].$allowedClassesPostfix.$classes[$p]['class'];
 						if($_GET[$id] == "on")
 						{
 							if(!$alreadyFound)
@@ -155,18 +155,18 @@
 						$query_string = "INSERT INTO ".$db_table_courses."(ID, name, reldate, termdate, owner, allowed, enableChange) values(\"".$cid."\", \"".$realname."\", ".$relDateStamp.", ".$termDateStamp.", \"".$_SESSION['user']."\", \"".$allowString."\", ".$enableChange.");";
 						$ref->query($query_string);
 						
-						$query_string = "CREATE TABLE IF NOT EXISTS `".$cid.$courseObservationPostfix."`(username varchar(100) UNIQUE);";
+						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseObservationPostfix."(username varchar(100) UNIQUE);";
 						$ref->query($query_string);
-							
-						$query_string = "CREATE TABLE IF NOT EXISTS `".$cid.$courseInfoPostfix."`(ID tinyint, name varchar(100) UNIQUE, current int, max int, PRIMARY KEY(ID));";
+						
+						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseInfoPostfix."(ID tinyint, name varchar(100), current mediumint, max mediumint);";
 						$ref->query($query_string);
 						
 						for($i = 0; $i < count($projNames); $i++)
 						{
-							$query_string = "INSERT INTO `".$cid.$courseInfoPostfix."`(ID, name, current, max) values($i, \"".$projNames[$i]."\", 0,".$projSpaces[$i].");";
+							$query_string = "INSERT INTO ".$cid.$courseInfoPostfix."(ID, name, current, max) values(".$i.", \"".$projNames[$i]."\", 0,".$projSpaces[$i].");";
 							$ref->query($query_string);
 							
-							$query_string = "CREATE TABLE IF NOT EXISTS `".$cid."_".$i.$projectSignUpPostfix."`(username varchar(100), vname varchar(100), nname varchar(100), email varchar(100), alevel tinyint, class varchar(1));";
+							$query_string = "CREATE TABLE IF NOT EXISTS ".$cid."_".$i.$projectSignUpPostfix."(username varchar(100) UNIQUE, vname varchar(100), nname varchar(100), email varchar(100), alevel tinyint, class varchar(1));";
 							$ref->query($query_string);
 						}
 					}

@@ -109,28 +109,41 @@
 			
 			for($i = 0; $i < count($courses); $i++)
 			{
-				if(($courses[$i]['reldate'] <= $accessTime && $accessTime < $courses[$i]['termdate']) or $_SESSION['type'] == $teacher_prefix or $_SESSION['type'] == $admin_prefix or $dauth)
+				if(($courses[$i]['reldate'] <= $accessTime && $accessTime < $courses[$i]['termdate']) || $_SESSION['type'] == $teacher_prefix || $_SESSION['type'] == $admin_prefix || $dauth)
 				{
-					if(isAllowed($courses[$i]['allowed'], $_SESSION['alevel'], $_SESSION['class']) or $_SESSION['type'] == $teacher_prefix or $_SESSION['type'] == $admin_prefix or $dauth)
+					if(isAllowed($courses[$i]['allowed'], $_SESSION['alevel'], $_SESSION['class']) || $_SESSION['type'] == $teacher_prefix || $_SESSION['type'] == $admin_prefix || $dauth)
 					{
 						$query_string = "SELECT * FROM ".$courses[$i]['ID'].$courseInfoPostfix.";";
 						$projects = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
 						
 						$courseFound = TRUE;
-						echo "<h1>".$courses[$i]['name']."</h1>".PHP_EOL;
+						
+						echo "<div class = \"pheader\">".$courses[$i]['name'];
+						
+						if($_SESSION['type'] != $student_prefix)
+							echo "<a href = \"getresults.php?courseid=".$courses[$i]['ID']."\"><img alt = \"Download\" class = \"downloadicon\" src = \"../images/download.png\"/></a>".PHP_EOL;
+						echo "</div>".PHP_EOL;
+						
 						if($courses[$i]['enableChange'])
 						{
 							echo "<h6>Wechseln erlaubt</h6>".PHP_EOL;
 						}
 						
+						echo "<script>mkTimer(".$courses[$i]['termdate'].", ".time().");</script>".PHP_EOL;
+						
+						
 						echo "<table>".PHP_EOL;
-						if($_SESSION['type'] == $student_prefix)
+						if($_SESSION['type'] != $student_prefix)
 						{
-							echo "<tr><th width = \"50%\">Projekte</th><th width = \"25%\">Plätze frei</th><th width = \"25%\">Plätze</th>";
+							echo "<tr><th width = \"40%\">Projekt</th><th width = \"25%\">Plätze frei</th><th width = \"25%\">Plätze</th>";
 						}
 						else
 						{
-							echo "<tr><th width = \"50%\">Projekte</th><th width = \"15%\">Plätze frei</th><th width = \"15%\">Plätze</th>";
+							echo "<tr><th width = \"60%\">Projekt</th><th width = \"30%\">Plätze frei</th><th width = \"30%\">Plätze</th>";
+						}
+						
+						if($_SESSION['type'] != $student_prefix)
+						{
 							echo "<th width = \"20%\">Ergebnisse</th>";
 						}
 						
@@ -141,7 +154,7 @@
 							echo "<tr><td class = \"rowHover\" onclick = \"signUp('".$courses[$i]['name']."', ".$courses[$i]['ID'].", '".$projects[$k]['name']."', ".$projects[$k]['ID'].", ".intval($_SESSION['type'] != $student_prefix).");\">".$projects[$k]['name']."</td><td>".($projects[$k]['max'] - $projects[$k]['current'])."</td><td>".$projects[$k]['max']."</td>";
 						
 							if($_SESSION['type'] != $student_prefix)
-								echo "<td><a href = \"getresults.php?courseid=".$courses[$i]['ID']."&projectid=".$projects[$k]['ID']."\"><img alt = \"Download\" class = \"downloadicon\" src = \"../images/download512x512.png\"><img></a></td>";
+								echo "<td><a href = \"getresults.php?courseid=".$courses[$i]['ID']."&projectid=".$projects[$k]['ID']."\"><img alt = \"Download\" class = \"downloadicon\" src = \"../images/download.png\"/></a></td>";
 							echo "</tr>".PHP_EOL;
 						}
 						echo "</table><br>".PHP_EOL;

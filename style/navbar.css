@@ -24,6 +24,13 @@ ul
 	bottom: 0px;
 	left: 0px;
 	width: 100%;
+	display: inline-block;
+}
+
+#logo
+{
+	width: 16px;
+	height:	16px;
 }
 
 .blackground

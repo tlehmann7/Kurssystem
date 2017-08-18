@@ -43,15 +43,20 @@ body
 	color: rgb(230, 126, 34);
 }
 
-h1
+.pheader
 {
 	color: rgb(231, 76, 60);
 	font-size: 40px;
 	font-family: inherit;
+	font-weight: bold;
 	width: 20%;
+	height: auto;
+	display: inline-block;
 }
+
+/* TODO: fix alignment of download button */
 
 h6
 {
-	font-size: 14px;
+	font-size: 20px;
 }

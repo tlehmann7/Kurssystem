@@ -24,7 +24,7 @@ function spawnTimer(end, now, id)
 		else
 		{
 			offset = len - r.length;
-			for(i = 0; i < offset; i++)
+			for(var i = 0; i < offset; i++)
 			{
 				r = String(0) + r;
 			}

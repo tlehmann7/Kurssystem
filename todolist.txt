@@ -1,0 +1,7 @@
+editcourses
+
+responsive
+
+redirect after logout
+
+wallpaper constant width & height, fixed

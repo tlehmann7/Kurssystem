@@ -1,0 +1,35 @@
+HTTP: GET
+
+set {cid}_delete
+	delete ID
+		- done working
+	
+set {cid}_reldate = new reldate
+	- done working
+
+set {cid}_termdate = new termdate
+	- done working
+
+set {cid}_enableChange = on/off new enableChange
+	- done working
+
+set {cid}_name = new name
+	- done working
+
+
+TODO:
+projects:
+	set {cid}_{pid}_delete
+			delete project with pid from courses with cid
+			
+	set {cid}_{pid}_name = new name
+		- done working
+	
+	set {cid}_{pid}_maxspace = new max
+		- done working
+		
+allows?
+
+TODO List:
+
+Fix Keygen + adaptable for teachers

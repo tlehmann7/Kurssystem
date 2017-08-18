@@ -1,21 +1,25 @@
-<?php
-	require_once("../config/db.php");
-	initSession();
-	
-	if(isset($_GET['location']))
-	{
-		if($_GET['location'] == "logout")
-		{
-			session_destroy();
-			reDir("?location=welcome");
-		}
-	}
-?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset = "UTF-8"/>
 		<title>Kurssystem</title>
+		<?php
+			// fix please, no redirect
+		
+			require_once("../config/db.php");
+			initSession();
+
+			if(isset($_GET['location']))
+			{
+				if($_GET['location'] == "logout")
+				{
+					session_destroy();
+					reDir("?location=welcome");
+				}
+			}
+			
+			// To Be fixed 
+		?>
 		<meta name = "author" content = "Tom Reinhardt"/>
 		<link rel = "stylesheet" href = "../style/main.css"/>
 		<link rel = "stylesheet" href = "../style/input.css"/>
@@ -25,6 +29,7 @@
 		<script src = "../Javascript/coursesignup.js"></script>
 		<script src = "../Javascript/ccourse.php"></script>
 		<script src = "../Javascript/tangen.js"></script>
+		<script src = "../Javascript/timer.js"></script>
 	</head>
 	<body>
 		<div class = "blackground">
@@ -47,6 +52,7 @@
 						if($_SESSION['type'] == $teacher_prefix || $_SESSION['type'] == $admin_prefix)
 						{
 							linkGen("Kurs erstellen", "?location=createcourse");
+							linkGen("Kurse bearbeiten", "?location=editcourses");
 							linkGen("TAN generieren", "?location=tangen");
 						}
 					}
@@ -67,7 +73,10 @@
 			<li>
 		</div>
 		<div class = "footerdiv">
-			<a class = "footer-link" target = "_blank" href = "http://www.tom-reinhardt.de">Tom Reinhardt &copy; 2017</a>
+			<a class = "footer-link" target = "_blank" href = "http://www.tom-reinhardt.de">
+				<img src = "../images/logo3_egg.png" id = "logo"/>
+				Tom Reinhardt &copy; 2017
+			</a>
 		</div>
 		<div id = "content" class = "wrapper70">
 			<?php
@@ -101,6 +110,10 @@
 						break;
 						case "mycourses":
 							include("mycourses_includeable.php");
+							echo PHP_EOL;
+						break;
+						case "editcourses":
+							include("editcourses_includeable.php");
 							echo PHP_EOL;
 						break;
 					}
