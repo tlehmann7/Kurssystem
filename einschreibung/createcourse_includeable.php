@@ -155,10 +155,10 @@
 						$query_string = "INSERT INTO ".$db_table_courses."(ID, name, reldate, termdate, owner, allowed, enableChange) values(\"".$cid."\", \"".$realname."\", ".$relDateStamp.", ".$termDateStamp.", \"".$_SESSION['user']."\", \"".$allowString."\", ".$enableChange.");";
 						$ref->query($query_string);
 						
-						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseObservationPostfix."(username varchar(100) UNIQUE);";
+						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseObservationPostfix."(username VARCHAR(100) UNIQUE);";
 						$ref->query($query_string);
 						
-						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseInfoPostfix."(ID tinyint, name varchar(100), current mediumint, max mediumint);";
+						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseInfoPostfix."(ID TINYINT, name VARCHAR(100), current MEDIUMINT, max MEDIUMINT, PRIMARY KEY(ID));";
 						$ref->query($query_string);
 						
 						for($i = 0; $i < count($projNames); $i++)

@@ -1,5 +1,7 @@
 editcourses
 
+createcourse: check if date is valid
+
 responsive
 
 redirect after logout

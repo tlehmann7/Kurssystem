@@ -21,6 +21,7 @@ TODO:
 projects:
 	set {cid}_{pid}_delete
 			delete project with pid from courses with cid
+				- done, seems to be working
 			
 	set {cid}_{pid}_name = new name
 		- done working
