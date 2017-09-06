@@ -61,13 +61,13 @@
 													{
 														if($projects[$p]['ID'] != $tProjects[$k]['ID'])
 														{
-															$query_string = "DELETE FROM `".$courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix."` WHERE username = \"".$_SESSION['user']."\";";
+															$query_string = "DELETE FROM ".$courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix." WHERE username = \"".$_SESSION['user']."\";";
 															$ref->query($query_string);
-															$query_string = "INSERT INTO `".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix."` values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
+															$query_string = "INSERT INTO ".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix." values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
 															$ref->query($query_string);
-															$query_string = "UPDATE `".$courses[$i]['ID'].$courseInfoPostfix."` SET current = current - 1 WHERE ID = \"".$tProjects[$k]['ID']."\";";
+															$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current - 1 WHERE ID = \"".$tProjects[$k]['ID']."\";";
 															$ref->query($query_string);
-															$query_string = "UPDATE `".$courses[$i]['ID'].$courseInfoPostfix."` SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
+															$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
 															$ref->query($query_string);
 															$signedUp = TRUE;
 															messageUser("Du bist zu ".$projects[$p]['name']." gewechselt");
@@ -118,15 +118,15 @@
 						
 						$courseFound = TRUE;
 						
-						echo "<div class = \"pheader\">".$courses[$i]['name'];
+						echo "<div class = \"pheader\"><h1>".$courses[$i]['name']."</h1>";
 						
 						if($_SESSION['type'] != $student_prefix)
-							echo "<a href = \"getresults.php?courseid=".$courses[$i]['ID']."\"><img alt = \"Download\" class = \"downloadicon\" src = \"../images/download.png\"/></a>".PHP_EOL;
+							echo "<a href = \"getresults.php?courseid=".$courses[$i]['ID']."\"><img alt = \"Download\" class = \"downloadicon moveUp\" src = \"../images/download.png\"/></a>".PHP_EOL;
 						echo "</div>".PHP_EOL;
 						
 						if($courses[$i]['enableChange'])
 						{
-							echo "<h6>Wechseln erlaubt</h6>".PHP_EOL;
+							echo "<h2>Wechseln erlaubt</h2>".PHP_EOL;
 						}
 						
 						echo "<script>mkTimer(".$courses[$i]['termdate'].", ".time().");</script>".PHP_EOL;

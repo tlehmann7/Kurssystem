@@ -1,18 +1,18 @@
-input
-{
-	font-family: UI;
-	font-size: 20px;
-	color: inherit;
-	border: 1px rgba(236, 240, 241, 0.5) solid;
-	background: none;
-}
-
 .submit
 {
 	font-family: UI;
 	font-size: 20px;
 	color: inherit;
-	border: 2px rgba(236, 240, 241, 1.0) solid;
+	border: 3px rgba(236, 240, 241, 0.5) solid;
+	background: none;
+}
+
+input
+{
+	font-family: UI;
+	font-size: 18px;
+	color: inherit;
+	border: 2px rgba(236, 240, 241, 0.5) solid;
 	background: none;
 }
 
@@ -31,23 +31,6 @@ input
 	background-color: rgba(236, 240, 241, 1.0);
 }
 
-.guiA
-{
-	border: rgba(52, 73, 94, 1.0) 3px solid;
-	color: rgba(236, 240, 241, 1.0);
-	background-color: rgba(52, 73, 94, 1.0);
-	padding: 0.3em;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-	text-decoration: none;
-}
-
-.guiA:hover
-{
-	color: rgba(52, 73, 94, 1.0);
-	background-color: rgba(236, 240, 241, 1.0);
-}
-
 table
 {
 	font-size: 32px;
@@ -56,6 +39,6 @@ table
 .rowHover:hover
 {
 	color: rgba(52, 73, 94, 1.0);
-	background-color: rgba(236, 240, 241, 0.75);
-	/*cursor: pointer;*/
+	background-color: rgba(236, 240, 241, 0.9);
+	cursor: pointer;
 }

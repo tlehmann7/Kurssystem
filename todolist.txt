@@ -7,3 +7,5 @@ responsive
 redirect after logout
 
 wallpaper constant width & height, fixed
+
+design überarbeiten

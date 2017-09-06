@@ -1,4 +1,6 @@
 <?php
+
+	$version = "1.0";
 	// Database Scrap
 	$db_host = "localhost";
 	$db_user = "root";
@@ -18,7 +20,7 @@
 	
 	// Authnum generation
 	$key_charset = "0123456789ABCDEF";
-	$key_length = 6;
+	$key_length = 7;
 	
 	// Course standard release time
 	$deltaTime = 17 * 3600; // 18 Uhr
@@ -81,7 +83,7 @@
 		if(!$ref->connect_error)
 		{
 			// Create Database
-			$query_string = "CREATE DATABASE IF NOT EXISTS ".$db_name;
+			$query_string = "CREATE DATABASE IF NOT EXISTS ".$db_name.";";
 			if(!$ref->query($query_string))
 				print_err("Fehler bei der MYSQL Query");
 			if(!$ref->select_db($db_name))
@@ -89,12 +91,12 @@
 			
 			
 			// Create Tables
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID mediumint AUTO_INCREMENT, username varchar(100), password varchar(40), vname varchar(100), nname varchar(100), email varchar(100), type varchar(1), alevel tinyint, class varchar(1), PRIMARY KEY(ID));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID mediumint AUTO_INCREMENT, username varchar(100), password varchar(40), vname varchar(100), nname varchar(100), email varchar(100), type varchar(1), alevel tinyint, class varchar(10), PRIMARY KEY(ID));";
 			if(!$ref->query($query_string))
 				print_err("Fehler bei der MYSQL Query");
 			
 			
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_num."(AUTHNUM varchar(".$key_length.") UNIQUE, type varchar(1), alevel tinyint, class varchar(1));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_num."(AUTHNUM varchar(".$key_length.") UNIQUE, timestamp int, type varchar(10), alevel tinyint, class varchar(10));";
 			if(!$ref->query($query_string))
 				print_err("Fehler bei der MYSQL Query");
 			
@@ -216,9 +218,19 @@
 		$ledate = $ledate - $timeNow % 86400;
 		$timeNow = $timeNow - $timeNow % 86400;
 		
-		$ledate = $ledate + $deltaTime;
+		//$ledate = $ledate + $deltaTime;
 		
 		return $ledate;
+	}
+	
+	function getDays($s)
+	{
+		return date_create_from_format("d.m.Y-H:i:s", $s."-00:00:00")->getTimestamp() + 3600;
+	}
+	
+	function getTime($s)
+	{
+		return date_create_from_format("d.m.Y-H:i:s", "01.01.1970-".$s)->getTimestamp();
 	}
 	
 	function initSession()
@@ -360,6 +372,55 @@
 			}
 		}
 		return $yearOk && $classOk;
+	}
+	
+	function loadCSV($cname, $headerStrings, $arr, $keys)
+	{
+		global $csvSep;
+		global $csvNewline;
+		header("Content-Disposition: attachment; filename=\"".$cname.".csv\"");
+		header("Content-Type: application/vnd.ms-excel;");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		$out = fopen("php://output", "w");
+		
+		$hline = "";
+		for($i = 0; $i < count($headerStrings); $i++)
+		{
+			$hline .= csvquote($headerStrings[$i]);
+			if($i + 1 < count($headerStrings))
+				$hline .= $csvSep;
+			else
+				$hline .= $csvNewline;
+		}
+		
+		fwrite($out, $hline);
+		
+		for($i = 0; $i < count($arr); $i++)
+		{
+			$ts = "";
+			for($ki = 0; $ki < count($keys); $ki++)
+			{
+				$ts .= csvquote($arr[$i][$keys[$ki]]);
+				if($ki + 1 < count($keys))
+					$ts .= $csvSep;
+			}
+			$ts .= $csvNewline;
+			fwrite($out, $ts);
+		}
+		fclose($out);
+	}
+	
+	function getCIDs()
+	{
+		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
+		if(!$ref->connect_error)
+		{
+			$query_string = "SELECT ID FROM ".$db_table_courses.";";
+			return $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+		}
+		else
+			return array("failure");
 	}
 	
 	function getCheckboxOutput($s)

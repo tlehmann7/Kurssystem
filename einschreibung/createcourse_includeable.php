@@ -14,8 +14,12 @@
 		</div>
 		<div id = "createcourse-inputfields">
 			<input name = "name" type = "text" placeholder = "z.B. Projektwoche" required/><br>
-			<input name = "reldate" type = "date" placeholder = "TAG.MONAT.JAHR" required/><br>
-			<input name = "termdate" type = "date" placeholder = "TAG.MONAT.JAHR" required/><br>
+			<input name = "reldate" type = "date" placeholder = "TAG.MONAT.JAHR" required/>
+			um
+			<input name = "reldate-daytime" type = "date" placeholder = "STUNDE:MINUTE:SEKUNDE" required/><br>
+			<input name = "termdate" type = "date" placeholder = "TAG.MONAT.JAHR" required/>
+			um
+			<input name = "termdate-daytime" type = "date" placeholder = "STUNDE:MINUTE:SEKUNDE" required/><br>
 			<input name = "enableChange" type = "checkbox"/><br>
 		</div>
 		<br>
@@ -49,11 +53,11 @@
 				<tr><th width = "10%">Name</th><th width = "15%">Plätze</th></tr>
 			</table>
 		</div>
-		<input type = "button" value = "Neues Projekt" onclick = "addNew();"/>
-		<input type = "button" value = "Lösche letztes Projekt" onclick = "remove();"/>
+		<input type = "button" value = "Neues Projekt" onclick = "addNew();" class = "submit"/>
+		<input type = "button" value = "Lösche letztes Projekt" onclick = "remove();" class = "submit"/>
 		<br>
 		<input class = "off" type = "text" name = "location" value = "createcourse"/>
-		<input type = "submit" value = "Fertig"/>
+		<input type = "submit" value = "Fertig" class = "submit"/>
 		<br>
 	</form>
 	<?php
@@ -68,8 +72,10 @@
 			{
 				$relDateStamp = date_create_from_format("d.m.Y", $_GET['reldate'])->getTimestamp();
 				$relDateStamp = courseStamp($relDateStamp);
+				$relDateStamp += (date_create_from_format("d.m.Y-H:i:s", "01.01.1970-".$_GET['reldate-daytime'])->getTimestamp() - 3600);
 				$termDateStamp = date_create_from_format("d.m.Y", $_GET['termdate'])->getTimestamp();
 				$termDateStamp = courseStamp($termDateStamp);
+				$termDateStamp += (date_create_from_format("d.m.Y-H:i:s", "01.01.1970-".$_GET['termdate-daytime'])->getTimestamp() - 3600);
 				
 				$allowString = "";
 				
@@ -88,7 +94,7 @@
 					for($p = 0; $p < count($classes); $p++)
 					{
 						$id = $allowedCPrefix.$alevels[$i]['alevel'].$allowedClassesPostfix.$classes[$p]['class'];
-						if($_GET[$id] == "on")
+						if(getCheckboxOutput($_GET[$id]))
 						{
 							if(!$alreadyFound)
 							{
@@ -166,7 +172,7 @@
 							$query_string = "INSERT INTO ".$cid.$courseInfoPostfix."(ID, name, current, max) values(".$i.", \"".$projNames[$i]."\", 0,".$projSpaces[$i].");";
 							$ref->query($query_string);
 							
-							$query_string = "CREATE TABLE IF NOT EXISTS ".$cid."_".$i.$projectSignUpPostfix."(username varchar(100) UNIQUE, vname varchar(100), nname varchar(100), email varchar(100), alevel tinyint, class varchar(1));";
+							$query_string = "CREATE TABLE IF NOT EXISTS ".$cid."_".$i.$projectSignUpPostfix."(username varchar(100) UNIQUE, vname varchar(100), nname varchar(100), email varchar(100), alevel TINYINT, class varchar(10));";
 							$ref->query($query_string);
 						}
 					}

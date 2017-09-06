@@ -1,15 +1,15 @@
 #register-labels, #login-labels, #createcourse-labels, #numgen-labels
 {
-	/*width: 35%;*/
 	display: inline-block;
 	text-align: left;
+	font-size: 24px;
 }
 
 #register-inputfields, #login-inputfields, #createcourse-inputfields, #numgen-inputfields
 {
-	/*width: 35%;*/
 	display: inline-block;
 	margin-left: 0.5%;
+	font-size: 24px;
 }
 
 .off
@@ -32,10 +32,4 @@
 {
 	text-decoration: none;
 	color: inherit;
-}
-
-.downloadicon
-{
-	width: 75px;
-	height: 75px;
 }

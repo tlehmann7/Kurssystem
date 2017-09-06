@@ -1,19 +1,39 @@
 .navbar
 {
+	font-size: 1.2vw;
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	width: 100%;
 	margin: 0px;
-	height: 4em;
-	background-color: rgba(13, 35, 57, 0.6);
-	z-index: 0;
+	height: 3.6em;
+	background-color: rgb(13, 35, 57);
+	border: 0px solid;
+	z-index: 1;
+	text-decoration: none;
 }
 
 ul
 {
 	display: inline-block;
-	padding-right: 3.5%;
+	padding-right: 3.5vw;
+}
+
+.guiA
+{
+	border: rgba(236, 240, 241, 1.0) 3px solid;
+	color: rgba(236, 240, 241, 1.0);
+	background-color: rgb(13, 35, 57);
+	padding: 0.3em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	text-decoration: none;
+}
+
+.guiA:hover
+{
+	color: rgb(13, 35, 57);
+	background-color: rgba(236, 240, 241, 1.0);
 }
 
 .footerdiv
@@ -25,6 +45,8 @@ ul
 	left: 0px;
 	width: 100%;
 	display: inline-block;
+	border: 0px solid;
+	z-index: -1;
 }
 
 #logo
@@ -42,11 +64,4 @@ ul
 	width: 100%;
 	height: 100%;
 	z-index: -2;
-}
-
-#content
-{
-	position: absolute;
-	margin-top: 2%;
-	z-index: -1;
 }

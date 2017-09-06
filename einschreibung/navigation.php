@@ -20,6 +20,7 @@
 			
 			// To Be fixed 
 		?>
+		
 		<meta name = "author" content = "Tom Reinhardt"/>
 		<link rel = "stylesheet" href = "../style/main.css"/>
 		<link rel = "stylesheet" href = "../style/input.css"/>
@@ -28,7 +29,7 @@
 		<script src = "../Javascript/register.js"></script>
 		<script src = "../Javascript/coursesignup.js"></script>
 		<script src = "../Javascript/ccourse.php"></script>
-		<script src = "../Javascript/tangen.js"></script>
+		<script src = "../Javascript/keygen.php"></script>
 		<script src = "../Javascript/timer.js"></script>
 	</head>
 	<body>
@@ -53,7 +54,7 @@
 						{
 							linkGen("Kurs erstellen", "?location=createcourse");
 							linkGen("Kurse bearbeiten", "?location=editcourses");
-							linkGen("TAN generieren", "?location=tangen");
+							linkGen("Keys generieren", "?location=keygen");
 						}
 					}
 				?>
@@ -73,6 +74,7 @@
 			<li>
 		</div>
 		<div class = "footerdiv">
+			<span>ver <?php echo $version; ?></span>
 			<a class = "footer-link" target = "_blank" href = "http://www.tom-reinhardt.de">
 				<img src = "../images/logo3_egg.png" id = "logo"/>
 				Tom Reinhardt &copy; 2017
@@ -104,7 +106,7 @@
 							//include("");
 							echo PHP_EOL;
 						break;
-						case "tangen":
+						case "keygen":
 							include("numgen_includeable.php");
 							echo PHP_EOL;
 						break;

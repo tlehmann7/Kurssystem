@@ -36,10 +36,12 @@
 					do
 					{
 						$newnum = "";
-						for($p = 0; $p < $key_length; $p++)
+						for($p = 0; $p < $key_length - 1; $p++)
 						{
 							$newnum .= $key_charset[random_int(0, strlen($key_charset) - 1)];
 						}
+						
+						$newnum = "X".$newnum;
 						
 						for($p = 0; $p < count($allnums); $p++)
 						{

@@ -14,7 +14,7 @@
 				
 				for($i = 0; $i < count($courseIDs); $i++)
 				{
-					$query_string = "SELECT ID, name FROM `".$courseIDs[$i]['ID'].$courseInfoPostfix."`;";
+					$query_string = "SELECT ID, name FROM ".$courseIDs[$i]['ID'].$courseInfoPostfix.";";
 					$projIDs = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
 					
 					for($p = 0; $p < count($projIDs); $p++)

@@ -29,7 +29,7 @@ projects:
 	set {cid}_{pid}_maxspace = new max
 		- done working
 		
-allows?
+allows - done working
 
 TODO List:
 
