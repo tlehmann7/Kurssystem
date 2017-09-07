@@ -3,9 +3,9 @@
 	$version = "1.0";
 	// Database Scrap
 	$db_host = "localhost";
-	$db_user = "root";
-	$db_password = "zisch27";
-	$db_name = "schule";
+	$db_user = "";
+	$db_password = "";
+	$db_name = "";
 	
 	$db_table_user = "users";
 	$db_table_num = "authkey";
