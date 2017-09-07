@@ -8,4 +8,4 @@ redirect after logout
 
 wallpaper constant width & height, fixed
 
-design überarbeiten
+design überarbeiten - done almost

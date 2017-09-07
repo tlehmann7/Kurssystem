@@ -86,7 +86,7 @@
 	?>
 	<form method = "GET">
 		<div id = "numgen-labels">
-			<label for = "count">Anzahl neue TAN: </label><br>
+			<label for = "count">Anzahl neue Codes: </label><br>
 			<label for = "type">Typ des neuen Benutzers:</label><br>
 			<div id = "student_disable">
 				<label for = "class">Klasse des Benutzers [A, B, C, D]:</label><br>
