@@ -30,17 +30,9 @@
 							loadCSV("keys", array("Code", "Typ"), $keydata, array("AUTHNUM", "type"));
 					}
 				}
-				else
-					print_err("No DB");
 				
 				$ref->close();
 			}
-			else
-				print_err("No set");
 		}
-		else
-			print_err("No Type");
 	}
-	else
-		print_err("No Auth");
 ?>
