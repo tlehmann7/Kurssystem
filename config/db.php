@@ -3,9 +3,9 @@
 	$version = "1.0";
 	// Database Scrap
 	$db_host = "localhost";
-	$db_user = "";
-	$db_password = "";
-	$db_name = "";
+	$db_user = "root";
+	$db_password = "zisch27";
+	$db_name = "schule";
 	
 	$db_table_user = "users";
 	$db_table_num = "authkey";
@@ -411,7 +411,7 @@
 		fclose($out);
 	}
 	
-	function getCIDs()
+	/*function getCIDs()
 	{
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 		if(!$ref->connect_error)
@@ -421,7 +421,7 @@
 		}
 		else
 			return array("failure");
-	}
+	}*/
 	
 	function getCheckboxOutput($s)
 	{
