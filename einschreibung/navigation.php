@@ -31,6 +31,7 @@
 		<script src = "../Javascript/ccourse.php"></script>
 		<script src = "../Javascript/keygen.php"></script>
 		<script src = "../Javascript/timer.js"></script>
+		<script src = "../Javascript/check.js"></script>
 	</head>
 	<body>
 		<div class = "blackground">

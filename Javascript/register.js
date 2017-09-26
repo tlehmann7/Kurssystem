@@ -1,7 +1,7 @@
 function upper(id)
 {
 	document.getElementById(id).value = document.getElementById(id).value.toUpperCase();
-	var charset = "0123456789ABCDEF";
+	var charset = "0123456789ABCDEFX";
 	var saveFalse = [];
 	
 	var found = false;

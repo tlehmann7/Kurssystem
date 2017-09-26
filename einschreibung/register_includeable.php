@@ -5,14 +5,16 @@
 			<label for = "vname">Vorname: </label><br>
 			<label for = "nname">Nachname: </label><br>
 			<label for = "password">Passwort: </label><br>
-			<label for = "email">Email: </label><br>
+			<label for = "password_eq">Passwort bestätigen: </label><br>
+			<label for = "email">E-Mail: </label><br>
 		</div>
 		<div id = "register-inputfields">
 			<input name = "authkey" type = "text" maxlength = <?php require_once("../config/db.php"); echo "\"".$key_length."\""; ?> id = "authkey" onkeyup = "upper(this.id);" required/><span id = "authkey-info"></span><?php require_once("../config/db.php"); if(isset($_POST['authkey'])) { if(!isGiven($db_table_num, "AUTHNUM", $_POST['authkey'])) print_err("<-- Es gibt diese Nummer nicht"); } ?><br>
 			<input name = "vname" type = "text" required/><br>
 			<input name = "nname" type = "text" required/><br>
-			<input name = "password" type = "password" required/><?php require_once("../config/db.php"); if(isset($_POST['password'])) { if(strlen($_POST['password']) < $pw_min_length) print_err("<-- Das Passwort hat mindestens ".$pw_min_length." Zeichen lang zu sein"); } ?><br>
-			<input name = "email" type = "e-mail" required/><?php require_once("../config/db.php"); if(isset($_POST['email'])) { if(empty(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) print_err("<-- Dies ist keine richtige Email-Addresse"); else if(isGiven($db_table_user, "email", $_POST['email'])) print_err("<-- Es ist bereits ein User mit dieser Email registriert"); } ?><br>
+			<input id = "p1" name = "password" type = "password" onchange = "checkifequal('p1', this.id, 'tellpwnoteq');" required/><?php require_once("../config/db.php"); if(isset($_POST['password'])) { if(strlen($_POST['password']) < $pw_min_length) print_err("<-- Das Passwort hat mindestens ".$pw_min_length." Zeichen lang zu sein"); } ?><br>
+			<input name = "password_eq" id = "p2" type = "password" onchange = "checkifequal(this.id, 'p2', 'tellpwnoteq');" required/><span class = "<?php echo $error_class; ?>" id = "tellpwnoteq"></span><br>
+			<input name = "email" type = "e-mail" required/><?php require_once("../config/db.php"); if(isset($_POST['email'])) { if(empty(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) print_err("<-- Dies ist keine richtige E-Mail-Addresse"); else if(isGiven($db_table_user, "email", $_POST['email'])) print_err("<-- Es ist bereits ein User mit dieser E-Mail registriert"); } ?><br>
 		</div>
 		<br>
 		<input class = "submit" type = "submit" value = "Registrieren"/>
