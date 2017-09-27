@@ -2,10 +2,6 @@
 	require_once("config/db.php");
 	initSession();
 	
-	//$dauth = true;
-	
-	//$_GET['timestamp'] = $argv[1];
-	
 	if($_SESSION['auth'])
 	{
 		if($_SESSION['type'] == $admin_prefix)

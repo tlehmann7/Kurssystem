@@ -26,6 +26,7 @@
 		<link rel = "stylesheet" href = "style/input.css"/>
 		<link rel = "stylesheet" href = "style/navbar.css"/>
 		<link rel = "stylesheet" href = "style/extra.css"/>
+		<link rel = "shortcut icon" href = "images/icon.ico"/>
 		<script src = "Javascript/register.js"></script>
 		<script src = "Javascript/coursesignup.js"></script>
 		<script src = "Javascript/ccourse.php"></script>
