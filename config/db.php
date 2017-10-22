@@ -481,6 +481,8 @@
 		global $db_name;
 		global $db_table_user;
 		global $db_table_logs;
+		global $_SESSION;
+		global $_SERVER;
 		
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 		
@@ -488,7 +490,7 @@
 		{
 			$currIP = $_SERVER['REMOTE_ADDR'];
 			
-			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, userID, action) values(\"".$currIP."\", ".time().", ".$userID.", ".implode(";", $action).");";
+			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", ".$username.", ".implode(";", $action).");";
 			$ref->query($query_string);
 			
 			$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$user."\";";
