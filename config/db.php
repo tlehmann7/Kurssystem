@@ -491,7 +491,7 @@
 			else
 				$currIP = "Unset";
 			
-			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", ".$username.", ".implode(";", $action).");";
+			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", \"".$username."\", \"".implode(";", $action)."\");";
 			$ref->query($query_string);
 			
 			$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$username."\";";
