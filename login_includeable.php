@@ -46,6 +46,7 @@
 				$_SESSION['type'] = $type;
 				$_SESSION['alevel'] = $alevel;
 				$_SESSION['class'] = $class;
+				logAction($_SESSION['user'], array($log_login));
 				
 				echo "<script>window.onload = function() { var tempString = \"\"; for(i = 0; i < window.location.href.length; i++) { if(window.location.href.charAt(i) != '?') tempString += window.location.href.charAt(i); else break; } window.location.href = tempString + \"?location=showcourses\"; }</script>".PHP_EOL;
 				if($type == $student_prefix)

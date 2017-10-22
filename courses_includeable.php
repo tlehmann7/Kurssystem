@@ -49,6 +49,7 @@
 												$ref->query($query_string);
 												$signedUp = TRUE;
 												messageUser("Du bist jetzt in ".$projects[$p]['name']." eingeschrieben");
+												logAction($_SESSION['user'], array($log_signup, $projects[$p]['name']));
 												break;
 											}
 											else if($courses[$i]['enableChange'] && isGiven($courses[$i]['ID'].$courseObservationPostfix, "username", $_SESSION['user']))
@@ -71,19 +72,28 @@
 															$ref->query($query_string);
 															$signedUp = TRUE;
 															messageUser("Du bist zu ".$projects[$p]['name']." gewechselt");
-															logAction($_SESSION['user'], array($log_change, $tProjects[$k]['name'], $projects[$p]));
+															logAction($_SESSION['user'], array($log_change, $tProjects[$k]['name'], $projects[$p]['name']));
 															break;
 														}
 														else
+														{
+															logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "already_signed_up"));
 															messageUser("Du bist dort schon eingeschrieben");
+														}
 													}
 												}
 											}
 											else
+											{
+												logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "no_change_allowed"));
 												messageUser("Du hast dich bereits eingeschrieben");
+											}
 										}
 										else
+										{
+											logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "overcrowded"));
 											messageUser("Das Projekt ist bereits voll");
+										}
 									}
 								}
 							}

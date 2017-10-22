@@ -17,6 +17,7 @@
 	$log_register = "register";
 	$log_signup = "signup";
 	$log_change = "change";
+	$log_refused = "refused";
 	$log_reqpwdchange = "requestpasswordchange";
 	
 	// User things
