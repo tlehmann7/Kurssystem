@@ -10,6 +10,14 @@
 	$db_table_user = "users";
 	$db_table_num = "authkey";
 	$db_table_courses = "courses";
+	$db_table_logs = "logs";
+	
+	// log shit
+	$log_login = "login";
+	$log_register = "register";
+	$log_signup = "signup";
+	$log_change = "change";
+	$log_reqpwdchange = "requestpasswordchange";
 	
 	// User things
 	$student_prefix = 'S';
@@ -66,6 +74,13 @@
 	// debug
 	$dauth = false;
 	
+	// mail
+	$email_caption = "Kurssystem - ";
+	$mail_reset_key_length = 40;
+	$mail_template_insert_keyword = "%HERE%";
+	$mail_template_filename = "config/email.template";
+	$mail_link_to_script = "https://fontaneum.gq/einschreibung/?location=changepassword&key=";
+	
 	function createDatabases()
 	{
 		global $db_host;
@@ -75,6 +90,7 @@
 		global $db_table_user;
 		global $db_table_num;
 		global $db_table_courses;
+		global $db_table_logs;
 		
 		global $key_length;
 		
@@ -85,28 +101,32 @@
 			// Create Database
 			$query_string = "CREATE DATABASE IF NOT EXISTS ".$db_name.";";
 			if(!$ref->query($query_string))
-				print_err("Fehler bei der MYSQL Query");
+				print_err($db_query_error_msg);
 			if(!$ref->select_db($db_name))
-				print_err("Fehler bei der Datenbank");
+				print_err($db_query_error_msg);
 			
 			
 			// Create Tables
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID mediumint AUTO_INCREMENT, username varchar(100), password varchar(40), vname varchar(100), nname varchar(100), email varchar(100), type varchar(1), alevel tinyint, class varchar(10), PRIMARY KEY(ID));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID MEDIUMINT AUTO_INCREMENT, username VARCHAR(100), password VARCHAR(40), vname VARCHAR(100), nname VARCHAR(100), email VARCHAR(100), type VARCHAR(1), alevel TINYINT, class VARCHAR(10), pwdresetkey VARCHAR(40), ips TEXT, PRIMARY KEY(ID));";
 			if(!$ref->query($query_string))
-				print_err("Fehler bei der MYSQL Query");
+				print_err($db_query_error_msg);
 			
 			
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_num."(AUTHNUM varchar(".$key_length.") UNIQUE, timestamp int, type varchar(10), alevel tinyint, class varchar(10));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_num."(AUTHNUM VARCHAR(".$key_length.") UNIQUE, timestamp INT, type VARCHAR(10), alevel TINYINT, class VARCHAR(10));";
 			if(!$ref->query($query_string))
-				print_err("Fehler bei der MYSQL Query");
+				print_err($db_query_error_msg);
 			
 			
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_courses."(ID tinyint, name varchar(100), reldate int, termdate int, owner varchar(100), allowed varchar(60), enableChange boolean, PRIMARY KEY(ID));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_courses."(ID TINYINT, name VARCHAR(100), reldate INT, termdate INT, owner VARCHAR(100), allowed VARCHAR(60), enableChange BOOLEAN, PRIMARY KEY(ID));";
 			if(!$ref->query($query_string))
-				print_err("Fehler bei der MYSQL Query");
+				print_err($db_query_error_msg);
+				
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_logs."(ID BIGINT UNSIGNED AUTO_INCREMENT, IP VARCHAR(15), username VARCHAR(100), timestamp INT, action TEXT, PRIMARY KEY(ID));";
+			if(!$ref->query($query_string))
+				print_err($db_query_error_msg);
 		}
 		else
-			print_err("Die Verbindung zu MYSQL konnte nicht hergestellt werden");
+			print_err($db_connection_error_msg);
 		
 		$ref->close();
 	}
@@ -284,52 +304,6 @@
 		return "onclick = \"signUp(".$cid.", ".$pid.", ".intval($type != $student_prefix).");\""; 
 	}
 	
-	/*function isEmail($themail)
-	{
-		if(count($themail) < 6)
-			return FALSE;
-		else
-		{
-			$at = FALSE;
-			$tld = FALSE;
-			$pre = FALSE;
-			$post = FALSE;
-			$atpos = 0;
-			$tldpos = 0;
-			for($i = 0; $i < count($themail); $i++)
-			{
-				if($themail[$i] == '@')
-				{
-					if(!$at)
-					{
-						$at = TRUE;
-						$atpos = $i;
-						if($i > 0)
-							$pre = TRUE;
-						else
-							return FALSE;
-					}
-					else
-						return FALSE;
-				}
-			}
-			
-			for($i = count($themail) - 1; $i >= 0; $i++)
-			{
-				if(!$tld && $themail[$i] == '.' && $i < count($themail) - 1)
-				{
-					$tld = TRUE;
-					$tldpos = $i;
-				}
-			}
-			
-			if($tldpos - $atpos >= 2)
-				$post = TRUE;
-			
-			if($pre && $at && 
-		}
-	}*/
-	
 	function reDir($s)
 	{
 		echo "<script>".PHP_EOL;
@@ -411,23 +385,135 @@
 		fclose($out);
 	}
 	
-	/*function getCIDs()
-	{
-		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
-		if(!$ref->connect_error)
-		{
-			$query_string = "SELECT ID FROM ".$db_table_courses.";";
-			return $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
-		}
-		else
-			return array("failure");
-	}*/
-	
 	function getCheckboxOutput($s)
 	{
-		if(strtolower($s) == "on")
-			return TRUE;
+		return strtolower($s) == "on";
+	}
+	
+	function getFilledTemplate($tofill)
+	{
+		global $mail_template_filename;
+		global $mail_template_insert_keyword;
+		
+		$file = fopen($mail_template_filename, "r");
+		
+		$fs = filesize($mail_template_filename);
+		
+		$tempString = "";
+		$content = "";
+		
+		for($ch = 0; $ch < $fs; $ch++)
+		{
+			$char = fread($file, 1);
+			
+			if($char == $mail_template_insert_keyword[strlen($tempString)])
+				$tempString .= $char;
+			else
+			{
+				$content .= $tempString.$char;
+				$tempString = "";
+			}
+			
+			if(strlen($mail_template_insert_keyword) == strlen($tempString))
+			{
+				$tempString = "";
+				$content .= $tofill;
+			}
+		}
+		
+		fclose($file);
+		
+		return $content;
+	}
+	
+	function RequestPwdReset($email)
+	{
+		global $key_charset;
+		global $email_caption;
+		global $mail_link_to_script;
+		global $mail_reset_key_length;
+		global $db_table_user;
+		global $db_name;
+		global $db_password;
+		global $db_user;
+		global $db_host;
+		
+		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
+		
+		if(!$ref->connect_error)
+		{
+			$email = $ref->real_escape_string($email);
+			if(isGiven($db_table_user, "email", $email) || isGiven($db_table_user, "username", $email))
+			{
+				$query_string = "SELECT email FROM ".$db_table_user." WHERE email = \"".$email."\" or username = \"".$email."\";";
+				$rmail = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC)[0]['email'];
+				
+				$key = "";
+				for($i = 0; $i < $mail_reset_key_length; $i++)
+				{
+					$key .= $key_charset[random_int(0, strlen($key_charset) - 1)];
+				}
+				
+				$query_string = "UPDATE ".$db_table_user." SET pwdresetkey = \"".$key."\" WHERE email = \"".$email."\" or username = \"".$email."\";";
+				$ref->query($query_string);
+				
+				$headers[] = 'MIME-Version: 1.0';
+				$headers[] = 'Content-type: text/html; charset=iso-8859-1';
+				
+				return mail($rmail, $email_caption."Passwort vergessen", getFilledTemplate($mail_link_to_script.$key), implode("\r\n", $headers));
+			}
+			else
+				return FALSE;
+		}
 		else
-			return FALSE;
+		{
+			echo "DB_ERR".PHP_EOL;
+			return false;
+		}
+	}
+	
+	function logAction($username, $action)
+	{
+		global $db_host;
+		global $db_user;
+		global $db_password;
+		global $db_name;
+		global $db_table_user;
+		global $db_table_logs;
+		
+		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
+		
+		if(!$ref->connect_error)
+		{
+			$currIP = $_SERVER['REMOTE_ADDR'];
+			
+			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, userID, action) values(\"".$currIP."\", ".time().", ".$userID.", ".implode(";", $action).");";
+			$ref->query($query_string);
+			
+			$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$user."\";";
+			$ips = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC)['ips'];
+			
+			$arrip = explode(";", $ips);
+			$found = false;
+			for($i = 0; $i < count($arrip); $i++)
+			{
+				if($arrip[$i] == $currIP)
+				{
+					$found = true;
+					break;
+				}
+			}
+			
+			if(!$found)
+			{
+				$arrip[] = $currIP;
+				$ips = implode(";", $arrip);
+				
+				$query_string = "UPDATE ".$db_table_user." set ips = \"".$ips."\" WHERE username = \"".$username."\";";
+				$ref->query($query);
+			}
+		}
+		
+		$ref->close();	
 	}
 ?>

@@ -122,6 +122,16 @@
 						break;
 					}
 				}
+				else if(!$_SESSION['auth'])
+				{
+					include("login_includeable.php");
+					echo PHP_EOL;
+				}
+				else if($_SESSION['auth'])
+				{
+					include("courses_includeable.php");
+					echo PHP_EOL;
+				}
 			?>
 		</div>
 	</body>

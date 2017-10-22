@@ -71,6 +71,7 @@
 															$ref->query($query_string);
 															$signedUp = TRUE;
 															messageUser("Du bist zu ".$projects[$p]['name']." gewechselt");
+															logAction($_SESSION['user'], array($log_change, $tProjects[$k]['name'], $projects[$p]));
 															break;
 														}
 														else

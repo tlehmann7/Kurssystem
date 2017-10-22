@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<meta charset = "UTF-8"/>
+		<title>Kurssystem - Passwort vergessen</title>
+		<style>
+			body
+			{
+				background-color: white;
+				color: rgb(44, 62, 80);
+				font: Monospace;
+				font-size: 14px;
+				text-align: center;
+			}
+			
+			h1
+			{
+				font: inherit;
+				font-size: 24px;
+				text-align: inherit;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1>Passwort vergessen</h1>
+		
+		<span>
+			Das Passwort kann
+			<a href = "%HERE%" target = "_blank">hier</a>
+			zur&#xFC;ckgesetzt werden.
+		</span>
+		
+		<br>
+		
+		<span>
+			Nicht angefordert?
+			<br>
+			Dann einfach ignorieren
+		</span>
+	</body>
+</html>

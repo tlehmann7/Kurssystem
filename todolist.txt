@@ -1,4 +1,4 @@
-editcourses
+editcourses - most of it done
 
 createcourse: check if date is valid
 
@@ -8,4 +8,6 @@ redirect after logout
 
 wallpaper constant width & height, fixed
 
-design überarbeiten - done almost
+logs --> LogID, IP, username, timestamp, action
+
+CREATE TABLE IF NOT EXISTS logs(ID UNSIGNED BIGINT AUTO_INCREMENT, IP varchar(15), userID mediumint, action text);
