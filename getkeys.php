@@ -21,7 +21,7 @@
 					if(count($keydata) > 0)
 					{
 						if($keydata[0]['type'] == $student_prefix)
-							loadCSV($keydata[0]['type'].$keydata[0]['alevel']." - ".$keydata[0]['class']." - keys", array("Code", "Typ", "Klasse/Tutorium"), $keydata, array("AUTHNUM", "type", "class"));
+							loadCSV($keydata[0]['type'].$keydata[0]['alevel']." - ".$keydata[0]['class']." - keys", array("Code", "Typ", "Abiturjahrgang", "Klasse/Tutorium"), $keydata, array("AUTHNUM", "type", "alevel", "class"));
 						else if($keydata[0]['type'] == $teacher_prefix)
 							loadCSV("Lehrerkeys", array("Code", "Typ"), $keydata, array("AUTHNUM", "type"));
 						else if($keydata[0]['type'] == $admin_prefix)

@@ -14,7 +14,7 @@
 				<input name = "password" type = "password"/><?php if(isset($_POST['password'])) { if(empty($_POST['password'])) print_err("<-- wird zum Einloggen benötigt"); } ?>
 			</div>
 		</div>
-		<input class = "submit" type = "submit" value = "Anmelden"/> oder <a href = ""></a>
+		<input class = "submit" type = "submit" value = "Anmelden"/> oder <a href = "?register">Registrieren</a>
 	</form>
 	<?php
 	}

@@ -85,7 +85,7 @@
 					// Give feedback to the user
 					print_success("Erfolgreich registriert");
 					echo "<br>";
-					logAction($_SESSION['user'], array($log_register));
+					logAction($username, array($log_register));
 					if($counter > 2)
 					{
 						switch($type)

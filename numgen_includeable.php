@@ -120,8 +120,20 @@
 	
 			for($l = 0; $l < count($stamps); $l++)
 			{
-				print_normal(date("d.m.Y - H:i:s", $stamps[$l]['timestamp']).":");
-				echo "<a href = \"getkeys.php?timestamp=".$stamps[$l]['timestamp']."\"><img src = \"images/download.png\" class = \"downloadicon\"/></a><br><br>".PHP_EOL;
+				$query_string = "SELECT type FROM ".$db_table_num." WHERE timestamp = ".$stamps[$l]['timestamp']." LIMIT 1;";
+				$type = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
+				
+				if($type['type'] == $student_prefix)
+				{
+					$query_string = "SELECT alevel, class FROM ".$db_table_num." WHERE timestamp = ".$stamps[$l]['timestamp']." LIMIT 1;";
+					$specs = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
+					print_normal($type['type'].$specs['alevel'].$specs['class']);
+				}
+				else
+				{
+					print_normal($type['type'].":");
+				}
+				echo "<a href = \"getkeys.php?timestamp=".$stamps[$l]['timestamp']."\"><img src = \"images/download.png\" alt = \"".date("d.m.Y - H:i:s")."\" class = \"downloadicon\"/></a><br><br>".PHP_EOL;
 			}
 		}
 		else
