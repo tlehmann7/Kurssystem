@@ -514,7 +514,7 @@
 				$ips = implode(";", $arrip);
 				
 				$query_string = "UPDATE ".$db_table_user." set ips = \"".$ips."\" WHERE username = \"".$username."\";";
-				$ref->query($query);
+				$ref->query($query_string);
 			}
 		}
 		
