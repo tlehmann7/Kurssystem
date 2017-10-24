@@ -58,6 +58,8 @@
 							linkGen("Kurse bearbeiten", "?location=editcourses");
 							linkGen("Keys generieren", "?location=keygen");
 						}
+						
+						linkGen("Passwort ändern", "?location=changepw");
 					}
 				?>
 				<ul>
@@ -118,6 +120,10 @@
 						break;
 						case "editcourses":
 							include("editcourses_includeable.php");
+							echo PHP_EOL;
+						break;
+						case "changepw":
+							include("changepassword_includeable.php");
 							echo PHP_EOL;
 						break;
 					}

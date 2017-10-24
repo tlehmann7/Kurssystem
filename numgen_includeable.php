@@ -127,7 +127,7 @@
 				{
 					$query_string = "SELECT alevel, class FROM ".$db_table_num." WHERE timestamp = ".$stamps[$l]['timestamp']." LIMIT 1;";
 					$specs = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
-					print_normal($type['type'].$specs['alevel'].$specs['class']);
+					print_normal($type['type'].$specs['alevel'].$specs['class'].":");
 				}
 				else
 				{

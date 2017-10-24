@@ -115,3 +115,8 @@ a:hover
 	background-color: rgba(236, 240, 241, 0.7);
 	color: rgba(13, 35, 57, 1.0);
 }
+
+#inline-wrapper
+{
+	display: inline-block;
+}

@@ -80,7 +80,7 @@
 	$mail_reset_key_length = 40;
 	$mail_template_insert_keyword = "%HERE%";
 	$mail_template_filename = "config/email.template";
-	$mail_link_to_script = "https://fontaneum.gq/einschreibung/?location=changepassword&key=";
+	$mail_link_to_script = "https://192.168.2.125/einschreibung/?location=changepw&key="; // please change afterwords
 	
 	function createDatabases()
 	{
