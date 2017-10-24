@@ -3,7 +3,7 @@
 	
 	initSession();
 	
-	if($_SESSION['auth'] && $_POST['npasswd'])
+	if($_SESSION['auth'] && isset($_POST['npasswd']))
 	{
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 		
