@@ -44,20 +44,21 @@
 			if(isGiven($db_table_num, "AUTHNUM", $authkey) && !isGiven($db_table_user, "email", $email))
 			{
 				// Build the Username
-				$query_string = "SELECT type FROM ".$db_table_num." WHERE AUTHNUM = \"".$authkey."\";";
-				$type = $ref->query($query_string)->fetch_array(MYSQLI_NUM)[0];
+				$query_string = "SELECT type, class, alevel FROM ".$db_table_num." WHERE AUTHNUM = \"".$authkey."\";";
+				$keyspecs = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
+				
+				$type = $keyspecs['type'];
 				
 				if($type == $student_prefix)
 				{
-					$query_string = "SELECT class FROM ".$db_table_num." WHERE AUTHNUM = \"".$authkey."\";";
-					$class = $ref->query($query_string)->fetch_array(MYSQLI_NUM)[0];
-					$query_string = "SELECT alevel FROM ".$db_table_num." WHERE AUTHNUM = \"".$authkey."\";";
-					$alevel = $ref->query($query_string)->fetch_array(MYSQLI_NUM)[0];
-					$username = $type.$alevel.$nname.$vname[0];
+					$class = $keyspecs['class'];
+					$alevel = $keyspecs['alevel'];
+					
+					$username = $type.$alevel.trimName($nname).trimName($vname)[0];
 				}
 				else
 				{
-					$username = $type.$nname.$vname[0];
+					$username = $type.trimName($nname).trimName($vname)[0];
 				}
 				
 				// If the username is already given
