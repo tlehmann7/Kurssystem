@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 	$version = "1.0";
 	// Database Scrap
@@ -519,5 +519,67 @@
 		}
 		
 		$ref->close();	
+	}
+
+	function trimName($s)
+	{
+		$step1 = "";
+		for($it = 0; $it < strlen($s); $it++)
+		{
+			switch($s[$it])
+			{
+				case " ":
+					$step1 .= "_";
+				break;
+				case "	":
+
+				break;
+				case "\n":
+
+				break;
+				default:
+					$step1 .= $s[$it];
+				break;
+			}
+		}
+
+		$step2 = "";
+		$hasBegun = false;
+		for($it = 0; $it < strlen($step1); $it++)
+		{
+			if(!$hasBegun)
+			{
+				if($step1[$it] != "_")
+				{
+					$hasBegun = true;
+					$step2 .= $step1[$it];
+				}
+			}
+			else
+			{
+				$step2 .= $step1[$it];
+			}
+		}
+
+		$ret = "";
+		$step2 = strrev($step2);
+		$hasBegun = false;
+		for($it = 0; $it < strlen($step2); $it++)
+		{
+			if(!$hasBegun)
+			{
+				if($step2[$it] != "_")
+				{
+					$hasBegun = true;
+					$ret .= $step2[$it];
+				}
+			}
+			else
+			{
+				$ret .= $step2[$it];
+			}
+		}
+
+		return strrev($ret);
 	}
 ?>
