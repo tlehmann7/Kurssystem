@@ -108,7 +108,7 @@
 			
 			
 			// Create Tables
-			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID MEDIUMINT AUTO_INCREMENT, username VARCHAR(100), password VARCHAR(40), vname VARCHAR(100), nname VARCHAR(100), email VARCHAR(100), type VARCHAR(1), alevel TINYINT, class VARCHAR(10), pwdresetkey VARCHAR(40), ips TEXT, PRIMARY KEY(ID));";
+			$query_string = "CREATE TABLE IF NOT EXISTS ".$db_table_user."(ID MEDIUMINT AUTO_INCREMENT, username VARCHAR(100) UNIQUE, password VARCHAR(40), vname VARCHAR(100), nname VARCHAR(100), email VARCHAR(100), type VARCHAR(1), alevel TINYINT, class VARCHAR(10), pwdresetkey VARCHAR(40) UNIQUE, ips TEXT, PRIMARY KEY(ID));";
 			if(!$ref->query($query_string))
 				print_err($db_query_error_msg);
 			
@@ -485,36 +485,35 @@
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 		
 		if(!$ref->connect_error)
-		{
-			if(isset($_SERVER['REMOTE_ADDR']))
-				$currIP = $_SERVER['REMOTE_ADDR'];
-			else
-				$currIP = "Unset";
-			
+		{	
 			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", \"".$username."\", \"".implode(";", $action)."\");";
 			$ref->query($query_string);
 			
-			$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$username."\";";
-			$ips = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC)['ips'];
-			
-			$arrip = explode(";", $ips);
-			$found = false;
-			for($i = 0; $i < count($arrip); $i++)
+			if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
 			{
-				if($arrip[$i] == $currIP)
+				$currIP = $_SERVER['REMOTE_ADDR'];
+				$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$username."\";";
+				$ips = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC)['ips'];
+			
+				$arrip = explode(";", $ips);
+				$found = false;
+				for($i = 0; $i < count($arrip); $i++)
 				{
-					$found = true;
-					break;
+					if($arrip[$i] == $currIP)
+					{
+						$found = true;
+						break;
+					}
 				}
-			}
 			
-			if(!$found)
-			{
-				$arrip[] = $currIP;
-				$ips = implode(";", $arrip);
+				if(!$found)
+				{
+					$arrip[] = $currIP;
+					$ips = implode(";", $arrip);
 				
-				$query_string = "UPDATE ".$db_table_user." set ips = \"".$ips."\" WHERE username = \"".$username."\";";
-				$ref->query($query_string);
+					$query_string = "UPDATE ".$db_table_user." set ips = \"".$ips."\" WHERE username = \"".$username."\";";
+					$ref->query($query_string);
+				}
 			}
 		}
 		

@@ -41,7 +41,7 @@
 			$class = null;
 			
 			// Only go ahead if the Number is given
-			if(isGiven($db_table_num, "AUTHNUM", $authkey) && !isGiven($db_table_user, "username", $email))
+			if(isGiven($db_table_num, "AUTHNUM", $authkey) && !isGiven($db_table_user, "email", $email))
 			{
 				// Build the Username
 				$query_string = "SELECT type FROM ".$db_table_num." WHERE AUTHNUM = \"".$authkey."\";";
