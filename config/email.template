@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset = "UTF-8"/>
-		<title>Kurssystem - Passwort vergessen</title>
+		<title>Fontaneum Kurssystem - Passwort vergessen</title>
 		<style>
 			body
 			{
@@ -33,9 +33,9 @@
 		<br>
 		
 		<span>
-			Nicht angefordert?
+			Du hast keinen Passwort-Reset angefordert?
 			<br>
-			Dann einfach ignorieren
+			Dann kannst du diese Nachricht einfach ignorieren.
 		</span>
 	</body>
 </html>
