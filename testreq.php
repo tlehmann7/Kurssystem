@@ -13,8 +13,10 @@
 	</head>
 	<body>
 		<form method = "GET">
-			<label for = "email">Enter ur Username or Email Address: </label><input type = "email" name = "email"/>
+			<label for = "email">Gebe deinen Username oder deine E-Mail Adresse ein: </label><input type = "email" name = "email"/>
 			<input type = "submit" value = "Abschicken"/>
-		</form>
+		</form> 
+		<br>
+		Bitte schaue auch in deinem Spam-Ordner nach.
 	</body>
 </html>
