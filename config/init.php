@@ -1,5 +1,5 @@
 <?php
 	require_once("db.php");
 	createDatabases();
-	reDir("../einschreibung/navigation.php");
+	hardReDir("../einschreibung/navigation.php");
 ?>

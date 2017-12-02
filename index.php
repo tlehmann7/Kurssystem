@@ -24,7 +24,6 @@
 		<link rel = "shortcut icon" href = "images/icon.ico"/>
 		<script src = "Javascript/register.js"></script>
 		<script src = "Javascript/coursesignup.js"></script>
-		<script src = "Javascript/ccourse.php"></script>
 		<script src = "Javascript/keygen.php"></script>
 		<script src = "Javascript/timer.js"></script>
 		<script src = "Javascript/check.js"></script>

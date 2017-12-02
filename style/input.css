@@ -34,6 +34,12 @@ input
 table
 {
 	font-size: 32px;
+	border-collapse: collapse;
+}
+
+table tr
+{
+	border-bottom: 2px rgba(236, 240, 241, 0.5) solid;
 }
 
 .rowHover:hover

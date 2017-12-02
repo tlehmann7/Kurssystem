@@ -498,7 +498,7 @@
 				$ips = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC)['ips'];
 				
 				$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", \"".$username."\", \"".implode(";", $action)."\");";
-			$ref->query($query_string);
+				$ref->query($query_string);
 			
 				$arrip = explode(";", $ips);
 				$found = false;
@@ -592,5 +592,45 @@
 		return strrev($ret);
 	}
 	
+	function getAllowInfo()
+	{
+		global $db_host;
+		global $db_user;
+		global $db_password;
+		global $db_name;
+		global $db_table_user;
+		
+		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 	
+		if(!$ref->connect_error)
+		{
+			$ret = array();
+		
+			$query_string = "SELECT DISTINCT alevel FROM ".$db_table_user." WHERE alevel IS NOT NULL ORDER BY alevel ASC;";
+			$alevels = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+		
+			for($i = 0; $i < count($alevels); $i++)
+			{
+				$prePush = new stdClass;
+				$prePush->alevel = $alevels[$i]['alevel'];
+			
+				$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i]['alevel'].";";
+				$classes = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+			
+				$classarr = array();
+				for($p = 0; $p < count($classes); $p++)
+				{
+					$classarr[] = $classes[$p]['class'];
+				}
+			
+				$prePush->classes = $classarr;
+			
+				$ret[] = $prePush;
+			}
+		
+			return $ret;
+		}
+		else
+			return (new stdClass);
+	}
 ?>

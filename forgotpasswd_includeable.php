@@ -8,7 +8,7 @@
 	}
 ?>
 <form method = "post" id = "form">
-	<h2>E-Mail für Passwortänderung</h2>
+	<h2>E-Mail für Passwortänderung</h2><br>
 	<label for = "email">E-Adresse oder Benutzername: </label><input name = "email" type = "text"/>
 	<input type = "hidden" value = "forgotpw" name = "location"/>
 	<input type = "submit" value = "Abschicken"/>

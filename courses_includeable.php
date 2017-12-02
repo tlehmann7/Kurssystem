@@ -30,69 +30,76 @@
 								{
 									if($_GET['projectid'] == $projects[$p]['ID'])
 									{
-										// Unsure
-										$query_string = "SELECT current, max FROM `".$courses[$i]['ID'].$courseInfoPostfix."` WHERE ID = \"".$projects[$p]['ID']."\";";
-										$places = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
-										if($places['current'] < $places['max'])
+										if(isAllowed($projects[$p]['allowed'], $_SESSION['alevel'], $_SESSION['class']))
 										{
-										/*if($projects[$p]['current'] < $project[$p]['max'])
-										{*/
-											$query_string = "SELECT username, vname, nname, email, class, alevel FROM ".$db_table_user." WHERE username = \"".$_SESSION['user']."\";";
-											$user_information = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
-											if(!isGiven($courses[$i]['ID'].$courseObservationPostfix, "username", $_SESSION['user']))
+											// Unsure
+											$query_string = "SELECT current, max FROM `".$courses[$i]['ID'].$courseInfoPostfix."` WHERE ID = \"".$projects[$p]['ID']."\";";
+											$places = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
+											if($places['current'] < $places['max'])
 											{
-												$query_string = "INSERT INTO `".$courses[$i]['ID'].$courseObservationPostfix."`(username) values(\"".$_SESSION['user']."\");";
-												$ref->query($query_string);
-												$query_string = "INSERT INTO `".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix."` values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
-												$ref->query($query_string);
-												$query_string = "UPDATE `".$courses[$i]['ID'].$courseInfoPostfix."` SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
-												$ref->query($query_string);
-												$signedUp = TRUE;
-												messageUser("Du bist jetzt in ".$projects[$p]['name']." eingeschrieben");
-												logAction($_SESSION['user'], array($log_signup, $projects[$p]['name']));
-												break;
-											}
-											else if($courses[$i]['enableChange'] && isGiven($courses[$i]['ID'].$courseObservationPostfix, "username", $_SESSION['user']))
-											{
-												$query_string = "SELECT ID, name FROM ".$courses[$i]['ID'].$courseInfoPostfix.";";
-												$tProjects = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
-												for($k = 0; $k < count($tProjects); $k++)
+											/*if($projects[$p]['current'] < $project[$p]['max'])
+											{*/
+												$query_string = "SELECT username, vname, nname, email, class, alevel FROM ".$db_table_user." WHERE username = \"".$_SESSION['user']."\";";
+												$user_information = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC);
+												if(!isGiven($courses[$i]['ID'].$courseObservationPostfix, "username", $_SESSION['user']))
 												{
-													if(isGiven($courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix, "username", $_SESSION['user']))
+													$query_string = "INSERT INTO `".$courses[$i]['ID'].$courseObservationPostfix."`(username) values(\"".$_SESSION['user']."\");";
+													$ref->query($query_string);
+													$query_string = "INSERT INTO `".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix."` values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
+													$ref->query($query_string);
+													$query_string = "UPDATE `".$courses[$i]['ID'].$courseInfoPostfix."` SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
+													$ref->query($query_string);
+													$signedUp = TRUE;
+													messageUser("Du bist jetzt in ".$projects[$p]['name']." eingeschrieben");
+													logAction($_SESSION['user'], array($log_signup, $projects[$p]['name']));
+													break;
+												}
+												else if($courses[$i]['enableChange'] && isGiven($courses[$i]['ID'].$courseObservationPostfix, "username", $_SESSION['user']))
+												{
+													$query_string = "SELECT ID, name FROM ".$courses[$i]['ID'].$courseInfoPostfix.";";
+													$tProjects = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+													for($k = 0; $k < count($tProjects); $k++)
 													{
-														if($projects[$p]['ID'] != $tProjects[$k]['ID'])
+														if(isGiven($courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix, "username", $_SESSION['user']))
 														{
-															$query_string = "DELETE FROM ".$courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix." WHERE username = \"".$_SESSION['user']."\";";
-															$ref->query($query_string);
-															$query_string = "INSERT INTO ".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix." values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
-															$ref->query($query_string);
-															$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current - 1 WHERE ID = \"".$tProjects[$k]['ID']."\";";
-															$ref->query($query_string);
-															$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
-															$ref->query($query_string);
-															$signedUp = TRUE;
-															messageUser("Du bist zu ".$projects[$p]['name']." gewechselt");
-															logAction($_SESSION['user'], array($log_change, $tProjects[$k]['name'], $projects[$p]['name']));
-															break;
-														}
-														else
-														{
-															logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "already_signed_up"));
-															messageUser("Du bist dort schon eingeschrieben");
+															if($projects[$p]['ID'] != $tProjects[$k]['ID'])
+															{
+																$query_string = "DELETE FROM ".$courses[$i]['ID']."_".$tProjects[$k]['ID'].$projectSignUpPostfix." WHERE username = \"".$_SESSION['user']."\";";
+																$ref->query($query_string);
+																$query_string = "INSERT INTO ".$courses[$i]['ID']."_".$projects[$p]['ID'].$projectSignUpPostfix." values(\"".$user_information['username']."\", \"".$user_information['vname']."\", \"".$user_information['nname']."\", \"".$user_information['email']."\", \"".$user_information['alevel']."\", \"".$user_information['class']."\");";
+																$ref->query($query_string);
+																$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current - 1 WHERE ID = \"".$tProjects[$k]['ID']."\";";
+																$ref->query($query_string);
+																$query_string = "UPDATE ".$courses[$i]['ID'].$courseInfoPostfix." SET current = current + 1 WHERE ID = \"".$projects[$p]['ID']."\";";
+																$ref->query($query_string);
+																$signedUp = TRUE;
+																messageUser("Du bist zu ".$projects[$p]['name']." gewechselt");
+																logAction($_SESSION['user'], array($log_change, $tProjects[$k]['name'], $projects[$p]['name']));
+																break;
+															}
+															else
+															{
+																logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "already_signed_up"));
+																messageUser("Du bist dort schon eingeschrieben");
+															}
 														}
 													}
+												}
+												else
+												{
+													logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "no_change_allowed"));
+													messageUser("Du hast dich bereits eingeschrieben");
 												}
 											}
 											else
 											{
-												logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "no_change_allowed"));
-												messageUser("Du hast dich bereits eingeschrieben");
+												logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "overcrowded"));
+												messageUser("Das Projekt ist bereits voll");
 											}
 										}
 										else
 										{
-											logAction($_SESSION['user'], array($log_refused, $projects[$p]['name'], "overcrowded"));
-											messageUser("Das Projekt ist bereits voll");
+											messageUser("Es ist dir nicht gestattet an diesem Projekt teilzunehmen");
 										}
 									}
 								}
@@ -146,22 +153,18 @@
 						echo "<table>".PHP_EOL;
 						if($_SESSION['type'] != $student_prefix)
 						{
-							echo "<tr><th width = \"40%\">Projekt</th><th width = \"25%\">Plätze frei</th><th width = \"25%\">Plätze</th>";
+							echo "<tr><th width = \"40%\">Projekt</th><th width = \"25%\">Plätze frei</th><th width = \"25%\">Plätze</th><th width = \"20%\">Ergebnisse</th>";
 						}
 						else
 						{
 							echo "<tr><th width = \"60%\">Projekt</th><th width = \"30%\">Plätze frei</th><th width = \"30%\">Plätze</th>";
 						}
 						
-						if($_SESSION['type'] != $student_prefix)
-						{
-							echo "<th width = \"20%\">Ergebnisse</th>";
-						}
-						
 						echo "</tr>".PHP_EOL;
 						
 						for($k = 0; $k < count($projects); $k++)
 						{
+							if($_SESSION['type'] != $student_prefix || isAllowed($projects[$k]['allowed'], $_SESSION['alevel'], $_SESSION['class']))
 							echo "<tr><td class = \"rowHover\" onclick = \"signUp('".$courses[$i]['name']."', ".$courses[$i]['ID'].", '".$projects[$k]['name']."', ".$projects[$k]['ID'].", ".intval($_SESSION['type'] != $student_prefix).");\">".$projects[$k]['name']."</td><td>".($projects[$k]['max'] - $projects[$k]['current'])."</td><td>".$projects[$k]['max']."</td>";
 						
 							if($_SESSION['type'] != $student_prefix)

@@ -1,6 +1,9 @@
 <?php
 	require_once("config/db.php");
 	initSession();
+	
+	if(!isset($_GET['count']) || intval($_GET['count']) < 1)
+		$_GET['count'] = 1;
 
 	if($_SESSION['auth'] && ($_SESSION['type'] == $teacher_prefix || $_SESSION['type'] == $admin_prefix))
 	{
@@ -14,12 +17,12 @@
 		</div>
 		<div id = "createcourse-inputfields">
 			<input name = "name" type = "text" placeholder = "z.B. Projektwoche" required/><br>
-			<input name = "reldate" type = "date" required/>
+			<input name = "reldate" type = "text" placeholder = "27.04.2031" required/>
 			um
-			<input name = "reldate-daytime" type = "datetime-local" required/><br>
-			<input name = "termdate" type = "date" required/>
+			<input name = "reldate-daytime" type = "text" placeholder = "16:34:56" required/><br>
+			<input name = "termdate" type = "text" placeholder = "27.04.2031" required/>
 			um
-			<input name = "termdate-daytime" type = "datetime-local" required/><br>
+			<input name = "termdate-daytime" type = "text" placeholder = "16:34:56" required/><br>
 			<input name = "enableChange" type = "checkbox"/><br>
 		</div>
 		<br>
@@ -29,7 +32,7 @@
 			
 			if(!$ref->connect_error)
 			{
-				$query_string = "SELECT DISTINCT alevel FROM ".$db_table_user." WHERE alevel IS NOT NULL ORDER BY alevel DESC;";
+				$query_string = "SELECT DISTINCT alevel FROM ".$db_table_user." WHERE alevel IS NOT NULL ORDER BY alevel ASC;";
 				$alevels = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
 				
 				for($i = 0; $i < count($alevels); $i++)
@@ -50,11 +53,40 @@
 		?>
 		<div id = "newProjects">
 			<table id = "projectTable">
-				<tr><th width = "10%">Name</th><th width = "15%">Plätze</th></tr>
+				<tr><th width = "10%">Name</th><th width = "15%">Plätze</th><th width = "20%">Jahrgänge erlauben</th></tr>
+				<?php
+					if(isset($_GET['count']))
+					{
+						$allowInfo = getAllowInfo();
+						for($kop = 0; $kop < intval($_GET['count']); $kop++)
+						{
+							echo "<tr><td><input type = \"text\" name = \"".$newProjectPrefix.$kop.$newProjectNamePostfix."\" required/></td><td><input type = \"number\" min = \"0\" name = \"".$newProjectPrefix.$kop.$newProjectSpacePostfix."\"></td>";
+							
+							$toput = "";
+							
+							for($l = 0; $l < count($allowInfo); $l++)
+							{
+								$toput .= $allowInfo[$l]->alevel.": ";
+								
+								for($cl = 0; $cl < count($allowInfo[$l]->classes); $cl++)
+								{
+									$toput .= $allowInfo[$l]->classes[$cl];
+									$toput .= "<input type = \"checkbox\" name = \"".$newProjectPrefix.$kop.$allowedCPrefix.$allowInfo[$l]->alevel.$allowedClassesPostfix.$allowInfo[$l]->classes[$cl]."\"/>";
+								}
+								
+								$toput .= "<br>";
+							}
+							
+							echo "<td>".$toput."</td>";
+							
+							echo "</tr>".PHP_EOL;
+						}
+					}
+				?>
 			</table>
 		</div>
-		<input type = "button" value = "Neues Projekt" onclick = "addNew();" class = "submit"/>
-		<input type = "button" value = "Lösche letztes Projekt" onclick = "remove();" class = "submit"/>
+		<a href = "?location=createcourse&count=<?php echo intval($_GET['count']) + 1; ?>">Neues Projekt</a>
+		<a href = "?location=createcourse&count=<?php if(intval($_GET['count']) > 1) echo intval($_GET['count']) - 1; else echo intval($_GET['count']); ?>">Lösche letztes Projekt</a>
 		<br>
 		<input class = "off" type = "text" name = "location" value = "createcourse"/>
 		<input type = "submit" value = "Fertig" class = "submit"/>
@@ -79,42 +111,45 @@
 				
 				$allowString = "";
 				
-				$query_string = "SELECT DISTINCT alevel FROM ".$db_table_user." WHERE alevel IS NOT NULL;";
-				$alevels = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
+				$allowInfo = getAllowInfo();
 				
-				for($i = 0; $i < count($alevels); $i++)
+				$aEndArray = array();
+				for($i = 0; $i < count($allowInfo); $i++)
 				{
-					$alreadyFound = FALSE;
+					$alreadyFound = false;
 					
-					$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i]['alevel']." ORDER BY class ASC;";
+					$aPreArr = array();
 					
-					$classes = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
-					
-					$buildString = "";
-					for($p = 0; $p < count($classes); $p++)
+					for($p = 0; $p < count($allowInfo[$i]->classes); $p++)
 					{
-						$id = $allowedCPrefix.$alevels[$i]['alevel'].$allowedClassesPostfix.$classes[$p]['class'];
+						$id = $allowedCPrefix.$allowInfo[$i]->alevel.$allowedClassesPostfix.$allowInfo[$i]->classes[$p];
 						if(getCheckboxOutput($_GET[$id]))
 						{
 							if(!$alreadyFound)
 							{
-								$alreadyFound = TRUE;
-								$buildString .= $alevels[$i]['alevel'].$buildString;
+								$alreadyFound = true;
+								$aPreArr[] = $allowInfo[$i]->alevel;
 							}
-							$buildString .= "#".$classes[$p]['class'];
+							
+							$aPreArr[] = $allowInfo[$i]->classes[$p];
 						}
 					}
 					
-					if($buildString != "")
-						$allowString .= $buildString.";";
+					if(count($aPreArr) > 0)
+						$aEndArray[] = implode("#", $aPreArr);
 				}
+				
+				$allowString = implode(";", $aEndArray);
 				
 				$projNames = array();
 				$projSpaces = array();
+				$projAllowStrings = array();
 				
 				$projNum = 0;
 				
 				$projOk = TRUE;
+				
+				$allowInfo = getAllowInfo();
 				
 				while(TRUE)
 				{
@@ -126,6 +161,39 @@
 						{
 							$projNames[] = $ref->real_escape_string($_GET[$idname]);
 							$projSpaces[] = intval($ref->real_escape_string($_GET[$idspace]));
+							
+							// goes here
+							
+							$endArray = array();
+							for($ol = 0; $ol < count($allowInfo); $ol++)
+							{
+								$alreadyFound = false;
+								
+								$preArr = array();
+								
+								for($oc = 0; $oc < count($allowInfo[$ol]->classes); $oc++)
+								{
+									$idallow = $newProjectPrefix.$projNum.$allowedCPrefix.$allowInfo[$ol]->alevel.$allowedClassesPostfix.$allowInfo[$ol]->classes[$oc];
+									
+									echo $idallow."<br>".PHP_EOL;
+									
+									if(getCheckboxOutput($_GET[$idallow]))
+									{
+										if(!$alreadyFound)
+										{
+											$alreadyFound = true;
+											$preArr[] = $allowInfo[$ol]->alevel;
+										}
+										
+										$preArr[] = $allowInfo[$ol]->classes[$oc];
+									}
+								}
+								
+								if(count($preArr) > 0)
+									$endArray[] = implode("#", $preArr);
+							}
+							
+							$projAllowStrings[] = implode(";", $endArray);
 						}
 						else
 							$projOk = FALSE;
@@ -164,12 +232,12 @@
 						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseObservationPostfix."(username VARCHAR(100) UNIQUE);";
 						$ref->query($query_string);
 						
-						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseInfoPostfix."(ID TINYINT, name VARCHAR(100), current MEDIUMINT, max MEDIUMINT, PRIMARY KEY(ID));";
+						$query_string = "CREATE TABLE IF NOT EXISTS ".$cid.$courseInfoPostfix."(ID TINYINT, name VARCHAR(100), current MEDIUMINT, max MEDIUMINT, allowed TEXT, PRIMARY KEY(ID));";
 						$ref->query($query_string);
 						
 						for($i = 0; $i < count($projNames); $i++)
 						{
-							$query_string = "INSERT INTO ".$cid.$courseInfoPostfix."(ID, name, current, max) values(".$i.", \"".$projNames[$i]."\", 0,".$projSpaces[$i].");";
+							$query_string = "INSERT INTO ".$cid.$courseInfoPostfix."(ID, name, current, max, allowed) values(".$i.", \"".$projNames[$i]."\", 0,".$projSpaces[$i].", \"".$projAllowStrings[$i]."\");";
 							$ref->query($query_string);
 							
 							$query_string = "CREATE TABLE IF NOT EXISTS ".$cid."_".$i.$projectSignUpPostfix."(username varchar(100) UNIQUE, vname varchar(100), nname varchar(100), email varchar(100), alevel TINYINT, class varchar(10));";
@@ -181,10 +249,6 @@
 			else
 				print_err($db_connection_error_msg);
 			$ref->close();
-		}
-		else
-		{
-			messageUser("Es sind nicht alle Parameter\nzum Erstellen des Kurses\ngegeben");
 		}
 	}
 	else if(!$_SESSION['auth'])
