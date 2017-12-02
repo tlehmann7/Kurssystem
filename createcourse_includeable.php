@@ -14,12 +14,12 @@
 		</div>
 		<div id = "createcourse-inputfields">
 			<input name = "name" type = "text" placeholder = "z.B. Projektwoche" required/><br>
-			<input name = "reldate" type = "date" placeholder = "TAG.MONAT.JAHR" required/>
+			<input name = "reldate" type = "date" required/>
 			um
-			<input name = "reldate-daytime" type = "date" placeholder = "STUNDE:MINUTE:SEKUNDE" required/><br>
-			<input name = "termdate" type = "date" placeholder = "TAG.MONAT.JAHR" required/>
+			<input name = "reldate-daytime" type = "datetime-local" required/><br>
+			<input name = "termdate" type = "date" required/>
 			um
-			<input name = "termdate-daytime" type = "date" placeholder = "STUNDE:MINUTE:SEKUNDE" required/><br>
+			<input name = "termdate-daytime" type = "datetime-local" required/><br>
 			<input name = "enableChange" type = "checkbox"/><br>
 		</div>
 		<br>

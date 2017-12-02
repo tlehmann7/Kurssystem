@@ -1,11 +1,11 @@
-#register-labels, #login-labels, #createcourse-labels, #numgen-labels
+#register-labels, #login-labels, #createcourse-labels, #numgen-labels, #changepw-labels
 {
 	display: inline-block;
 	text-align: left;
 	font-size: 24px;
 }
 
-#register-inputfields, #login-inputfields, #createcourse-inputfields, #numgen-inputfields
+#register-inputfields, #login-inputfields, #createcourse-inputfields, #numgen-inputfields, #changepw-inputfields
 {
 	display: inline-block;
 	margin-left: 0.5%;

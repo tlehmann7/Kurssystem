@@ -1,27 +1,12 @@
 <?php
 	require_once("config/db.php");
-	if(!$_SESSION['auth'])
-	{
-	?>
-	<form method = "POST">
-		<div id = "login-formwrapper">
-			<div id = "login-labels">
-				<label for = "username">Benutzername oder Email: </label><br>
-				<label for = "password">Passwort: </label><br>
-			</div>
-			<div id = "login-inputfields">
-				<input name = "username" type = "text"/><?php require_once("config/db.php"); if(isset($_POST['username'])) { if(empty($_POST['username'])) print_err("<-- wird zum Einloggen benötigt"); else if(!isGiven($db_table_user, "username", $_POST['username']) && !isGiven($db_table_user, "email", $_POST['username'])) print_err("<-- den Benutzernamen/die Email gibt es nicht"); } ?><br>
-				<input name = "password" type = "password"/><?php if(isset($_POST['password'])) { if(empty($_POST['password'])) print_err("<-- wird zum Einloggen benötigt"); } ?>
-			</div>
-		</div>
-		<input class = "submit" type = "submit" value = "Anmelden"/> oder <a href = "?location=register">Registrieren</a>
-	</form>
-	<?php
-	}
+	
+	$printpwdwrong = false;
 	
 	if(!empty($_POST['username']) && !empty($_POST['password']))
 	{
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
+		
 		if(!$ref->connect_error)
 		{
 			$username = $ref->real_escape_string($_POST['username']);
@@ -32,7 +17,7 @@
 			
 			$query_string = "SELECT password FROM ".$db_table_user." WHERE username = \"".$realusername."\";";
 			$pwd = $ref->query($query_string)->fetch_array(MYSQLI_NUM)[0];
-			
+		
 			if($pwd == sha1($password))
 			{
 				$query_string = "SELECT type FROM ".$db_table_user." WHERE username = \"".$realusername."\";";
@@ -48,7 +33,8 @@
 				$_SESSION['class'] = $class;
 				logAction($_SESSION['user'], array($log_login));
 				
-				echo "<script>window.onload = function() { var tempString = \"\"; for(i = 0; i < window.location.href.length; i++) { if(window.location.href.charAt(i) != '?') tempString += window.location.href.charAt(i); else break; } window.location.href = tempString + \"?location=showcourses\"; }</script>".PHP_EOL;
+				hardReDir("?location=showcourses");
+				
 				if($type == $student_prefix)
 				{
 					echo "<noscript>".PHP_EOL;
@@ -67,11 +53,34 @@
 				}
 			}
 			else
-				print_err("Das Passwort ist falsch");
+				$printpwdwrong = true;
 		}
 		else
 			die($db_con_error_msg);
 		
 		$ref->close();
+	}
+	
+	if(!$_SESSION['auth'])
+	{
+	?>
+	<form method = "POST">
+		<div id = "login-formwrapper">
+			<div id = "login-labels">
+				<label for = "username">Benutzername oder Email: </label><br>
+				<label for = "password">Passwort: </label><br>
+			</div>
+			<div id = "login-inputfields">
+				<input name = "username" type = "text"/><?php require_once("config/db.php"); if(isset($_POST['username'])) { if(empty($_POST['username'])) print_err("<-- wird zum Einloggen benötigt"); else if(!isGiven($db_table_user, "username", $_POST['username']) && !isGiven($db_table_user, "email", $_POST['username'])) print_err("<-- den Benutzernamen/die Email gibt es nicht"); } ?><br>
+				<input name = "password" type = "password"/><?php if(isset($_POST['password'])) { if(empty($_POST['password'])) print_err("<-- wird zum Einloggen benötigt"); } ?>
+			</div>
+		</div>
+		<input class = "submit" type = "submit" value = "Anmelden"/> oder <a href = "?location=register">Registrieren</a>
+	</form>
+	<?php
+		if($printpwdwrong)
+		{
+			print_err("Das Passwort ist falsch");
+		}
 	}
 ?>

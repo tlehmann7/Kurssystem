@@ -55,3 +55,15 @@ function upper(id)
 	else
 		document.getElementById(String(id + "-info")).innerHTML = "";
 }
+
+window.onkeypress = function()
+{
+	event = event || window.event;
+
+	charCode = event.charCode || event.keyCode;
+
+	if(charCode == 18)
+	{
+		document.getElementById("form").submit();
+	}
+}

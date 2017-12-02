@@ -1,26 +1,21 @@
+<?php
+	require_once("config/db.php");
+	initSession();
+
+	if(isset($_GET['location']))
+	{
+		if($_GET['location'] == "logout")
+		{
+			session_destroy();
+			hardReDir("?location=signin");
+		}
+	}
+?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset = "UTF-8"/>
-		<title>Kurssystem</title>
-		<?php
-			// fix please, no redirect
-		
-			require_once("config/db.php");
-			initSession();
-
-			if(isset($_GET['location']))
-			{
-				if($_GET['location'] == "logout")
-				{
-					session_destroy();
-					reDir("?location=welcome");
-				}
-			}
-			
-			// To Be fixed 
-		?>
-		
+		<title>Kurssystem</title>	
 		<meta name = "author" content = "Tom Reinhardt"/>
 		<link rel = "stylesheet" href = "style/main.css"/>
 		<link rel = "stylesheet" href = "style/input.css"/>
@@ -39,14 +34,10 @@
 		</div>
 		<div class = "navbar">
 			<li>
-				<ul>
-					<a class = "guiA" href = "?location=showcourses">
-						Aktuelle Kurse
-					</a>
-				</ul>
 				<?php
 					if($_SESSION['auth'])
 					{
+						linkGen("Aktuelle Kurse", "?location=showcourses");
 						if($_SESSION['type'] == $student_prefix)
 						{
 							linkGen("Meine Kurse", "?location=mycourses");
@@ -88,44 +79,69 @@
 			<?php
 				if(isset($_GET['location']))
 				{
-					switch($_GET['location'])
+					if($_SESSION['auth'])
 					{
-						case "signin":
-							include("login_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "register":
-							include("register_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "showcourses":
-							include("courses_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "createcourse":
-							include("createcourse_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "welcome":
-							//include("");
-							echo PHP_EOL;
-						break;
-						case "keygen":
-							include("numgen_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "mycourses":
-							include("mycourses_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "editcourses":
-							include("editcourses_includeable.php");
-							echo PHP_EOL;
-						break;
-						case "changepw":
-							include("changepassword_includeable.php");
-							echo PHP_EOL;
-						break;
+						switch($_GET['location'])
+						{
+							case "register":
+								include("register_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "showcourses":
+								include("courses_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "createcourse":
+								include("createcourse_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "welcome":
+								//include("");
+								echo PHP_EOL;
+							break;
+							case "keygen":
+								include("numgen_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "mycourses":
+								include("mycourses_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "editcourses":
+								include("editcourses_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "changepw":
+								include("changepassword_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "forgotpw":
+								include("forgotpasswd_includeable.php");
+								echo PHP_EOL;
+							break;
+						}
+					}
+					else
+					{
+						switch($_GET['location'])
+						{
+							case "signin":
+								include("login_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "register":
+								include("register_includeable.php");
+								echo PHP_EOL;
+							break;
+							case "forgotpw":
+								include("forgotpasswd_includeable.php");
+								echo PHP_EOL;
+							break;
+							default:
+								include("login_includeable.php");
+								echo PHP_EOL;
+							break;
+						}
 					}
 				}
 				else if(!$_SESSION['auth'])

@@ -23,6 +23,17 @@
 <?php
 	require_once("config/db.php");
 	
+	// Test
+	
+	/*$_POST['authkey'] = "X5F4659";
+	$_POST['vname'] = "Tom";
+	$_POST['nname'] = "Reinhardt";
+	$_POST['password'] = "test1234";
+	$_POST['email'] = "pap3@gmail.com";
+	*/
+	
+	// test
+	
 	if(!empty($_POST['authkey']) && !empty($_POST['vname']) && !empty($_POST['nname']) && !empty($_POST['password']) && strlen($_POST['password']) >= $pw_min_length && !empty(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) && !isGiven($db_table_user, "email", $_POST['email']))
 	{
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -117,11 +128,12 @@
 				else
 					die($db_query_error_msg);
 			}
+			else
+				$ref->close();
 		}
 		else
 		{
 			die($db_con_error_msg);
 		}
-		$ref->close();
 	}
 ?>

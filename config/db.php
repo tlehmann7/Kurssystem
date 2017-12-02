@@ -1,6 +1,6 @@
 ﻿<?php
 
-	$version = "1.0";
+	$version = "1.2";
 	// Database Scrap
 	$db_host = "localhost";
 	$db_user = "root";
@@ -300,7 +300,7 @@
 		return "\"".$s."\"";
 	}
 	
-	function mkSignupOnlick($cname, $pname, $cid, $pid, $type)
+	function mkSignupOnclick($cname, $pname, $cid, $pid, $type)
 	{
 		return "onclick = \"signUp(".$cid.", ".$pid.", ".intval($type != $student_prefix).");\""; 
 	}
@@ -310,6 +310,11 @@
 		echo "<script>".PHP_EOL;
 		echo "window.onload = function() { var tempString = \"\"; for(i = 0; i < window.location.href.length; i++) { if(window.location.href.charAt(i) != '?') tempString += window.location.href.charAt(i); else break; } window.location.href = tempString + \"".$s."\"; }".PHP_EOL;
 		echo "</script>".PHP_EOL;
+	}
+	
+	function hardReDir($s)
+	{
+		header("Location: ".$s);
 	}
 	
 	function linkGen($text, $href)
@@ -485,15 +490,15 @@
 		$ref = new mysqli($db_host, $db_user, $db_password, $db_name);
 		
 		if(!$ref->connect_error)
-		{	
-			$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", \"".$username."\", \"".implode(";", $action)."\");";
-			$ref->query($query_string);
-			
+		{			
 			if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
 			{
 				$currIP = $_SERVER['REMOTE_ADDR'];
 				$query_string = "SELECT ips FROM ".$db_table_user." WHERE username = \"".$username."\";";
 				$ips = $ref->query($query_string)->fetch_array(MYSQLI_ASSOC)['ips'];
+				
+				$query_string = "INSERT INTO ".$db_table_logs."(IP, timestamp, username, action) values(\"".$currIP."\", ".time().", \"".$username."\", \"".implode(";", $action)."\");";
+			$ref->query($query_string);
 			
 				$arrip = explode(";", $ips);
 				$found = false;
@@ -514,6 +519,11 @@
 					$query_string = "UPDATE ".$db_table_user." set ips = \"".$ips."\" WHERE username = \"".$username."\";";
 					$ref->query($query_string);
 				}
+			}
+			else
+			{
+				$query_string = "INSERT INTO ".$db_table_logs."(timestamp, username, action) values(".time().", \"".$username."\", \"".implode(";", $action)."\");";
+				$ref->query($query_string);
 			}
 		}
 		
@@ -581,4 +591,6 @@
 
 		return strrev($ret);
 	}
+	
+	
 ?>
