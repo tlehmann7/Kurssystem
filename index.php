@@ -136,6 +136,9 @@
 								include("forgotpasswd_includeable.php");
 								echo PHP_EOL;
 							break;
+							case "changepw":
+								include("changepassword_includeable.php");
+							break;
 							default:
 								include("login_includeable.php");
 								echo PHP_EOL;
