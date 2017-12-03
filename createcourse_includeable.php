@@ -175,8 +175,6 @@
 								{
 									$idallow = $newProjectPrefix.$projNum.$allowedCPrefix.$allowInfo[$ol]->alevel.$allowedClassesPostfix.$allowInfo[$ol]->classes[$oc];
 									
-									echo $idallow."<br>".PHP_EOL;
-									
 									if(getCheckboxOutput($_GET[$idallow]))
 									{
 										if(!$alreadyFound)

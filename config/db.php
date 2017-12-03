@@ -614,7 +614,7 @@
 				$prePush = new stdClass;
 				$prePush->alevel = $alevels[$i]['alevel'];
 			
-				$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i]['alevel'].";";
+				$query_string = "SELECT DISTINCT class FROM ".$db_table_user." WHERE alevel = ".$alevels[$i]['alevel']." ORDER BY class ASC;";
 				$classes = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC);
 			
 				$classarr = array();

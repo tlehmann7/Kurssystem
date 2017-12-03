@@ -21,7 +21,7 @@
 	else if($_SESSION['auth'])
 	{
 		?>
-			<h2>Passwortänderung</h2><br>
+			<h5>Passwortänderung</h5><br>
 			<div id = "inline-wrapper">
 				<div id = "changepwddiv">
 					<form method = "POST">
@@ -79,7 +79,7 @@
 			{
 				$username = $result->fetch_array(MYSQLI_ASSOC)['username'];
 				
-				echo "<h2>Neues Passwort für ".$username."</h2>".PHP_EOL;
+				echo "<h5>Neues Passwort für ".$username."</h5>".PHP_EOL;
 				echo "<div id = \"changepwddiv\">".PHP_EOL;
 				echo "<form method = \"POST\">".PHP_EOL;
 				
