@@ -35,7 +35,7 @@
 				$_SESSION['class'] = $class;
 				logAction($_SESSION['user'], array($log_login));
 				
-				hardReDir("?location=showcourses");
+				reDir("?location=showcourses");
 				
 				if($type == $student_prefix)
 				{
