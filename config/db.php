@@ -455,10 +455,15 @@
 				$rmail = $ref->query($query_string)->fetch_all(MYSQLI_ASSOC)[0]['email'];
 				
 				$key = "";
-				for($i = 0; $i < $mail_reset_key_length; $i++)
+				do
 				{
-					$key .= $key_charset[random_int(0, strlen($key_charset) - 1)];
+					$key = "";
+					for($i = 0; $i < $mail_reset_key_length; $i++)
+					{
+						$key .= $key_charset[random_int(0, strlen($key_charset) - 1)];
+					}
 				}
+				while(isGiven($db_table_user, "pwdresetkey", $key));
 				
 				$query_string = "UPDATE ".$db_table_user." SET pwdresetkey = \"".$key."\" WHERE email = \"".$email."\" or username = \"".$email."\";";
 				$ref->query($query_string);

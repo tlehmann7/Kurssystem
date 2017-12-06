@@ -1,6 +1,8 @@
 <?php
 	require_once("config/db.php");
 	
+	initSession();
+	
 	$printpwdwrong = false;
 	
 	if(!empty($_POST['username']) && !empty($_POST['password']))
