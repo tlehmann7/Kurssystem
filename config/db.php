@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 	$version = "1.2";
 	// Database Scrap
